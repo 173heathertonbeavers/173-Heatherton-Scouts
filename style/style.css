@@ -427,3 +427,116 @@ form button:hover {  background: #7C4D9E;}
 .form-select:valid {
   color: #000; /* normal text */
 }
+
+.archive-year {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.year-header,
+.post-header {
+    cursor: pointer;
+    padding: 12px;
+    user-select: none;
+}
+
+.year-header {
+    background: #f5f5f5;
+    font-size: 1.2rem;
+}
+
+.year-content {
+    display: none;
+}
+
+.archive-year.open .year-content {
+    display: block;
+}
+
+.archive-post {
+    border-top: 1px solid #eee;
+}
+
+.post-content {
+    display: none;
+    padding: 1rem;
+}
+
+.archive-post.open .post-content {
+    display: block;
+}
+
+.triangle {
+    display: inline-block;
+    transition: transform 0.2s;
+    margin-right: 8px;
+}
+
+.archive-year.open > .year-header .triangle {
+    transform: rotate(90deg);
+}
+
+.archive-post.open > .post-header .triangle {
+    transform: rotate(90deg);
+}
+
+.date {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+
+.archive-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem;
+}
+
+.archive-column {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.archive-column h2 {
+    margin-top: 0;
+}
+
+.events-list {
+    list-style: none;
+    padding: 0;
+}
+
+.events-list li {
+    margin-bottom: 0.75rem;
+}
+
+.events-list a {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.events-list a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .archive-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.gallery-item {
+    margin: 0;
+}
+
+.gallery-item figcaption {
+    text-align: center;
+    padding-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}

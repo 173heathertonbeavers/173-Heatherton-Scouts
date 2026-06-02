@@ -314,3 +314,65 @@ window.addEventListener("resize", () => {
     if (nav) nav.classList.remove("open");
   }
 });
+
+function buildArchive() {
+  if (typeof posts === "undefined") return;
+
+  const archive = document.getElementById("archive");
+  if (!archive) return;
+
+  // newest first
+  const sortedPosts = [...posts].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+
+  // group by year
+  const grouped = {};
+
+  sortedPosts.forEach(post => {
+    const year = new Date(post.date).getFullYear();
+
+    if (!grouped[year]) {
+      grouped[year] = [];
+    }
+
+    grouped[year].push(post);
+  });
+
+  // build html
+  Object.keys(grouped)
+    .sort((a, b) => b - a)
+    .forEach(year => {
+
+      const section = document.createElement("div");
+      section.classList.add("archive-year");
+
+      section.innerHTML = `
+        <div class="archive-header">
+          <span class="triangle"></span>
+          <h2>${year}</h2>
+        </div>
+
+        <div class="archive-content">
+          ${grouped[year].map(post => `
+            <article class="archive-post">
+              <h3>${post.title}</h3>
+              <p class="date">${post.date}</p>
+              ${post.content}
+            </article>
+          `).join("")}
+        </div>
+      `;
+
+      const header = section.querySelector(".archive-header");
+
+      header.addEventListener("click", () => {
+        section.classList.toggle("open");
+      });
+
+      archive.appendChild(section);
+    });
+
+  initFullscreenImages();
+}
+
