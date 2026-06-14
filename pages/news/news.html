@@ -1,63 +1,264 @@
-          <!DOCTYPE html> 
-        <html lang="en"> 
-<head> 
- <link rel="icon" href="favicon.png"> 
- <base href="/">
-<meta charset="UTF-8"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-          <meta name="description" content="173rd Derby Heatherton Scouts - Beavers, Cubs and Scouts in Heatherton Derby. Join us for fun, skills and scouting adventure.">
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon.png">
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="173rd Derby Heatherton Scouts News Archive">
 
-<title> News - 173rd Derby (Heatherton) Scouts </title> 
-<link rel="stylesheet" href="/style/style.css"> 
-</head> 
-<body> 
-<script> 
-const posts = [  
-  /* ADD NEW POSTS BELOW THIS*/
-{title: "Beavers get their Bronze Award!",
-date: "2026-05-27", 
-content: ` <p> Our Beaver colony reopened in September 2025. Today we awarded our first 2 Beavers their Bronze Award since reopening! Huge congratulations to both! </p> 
-`},  
-{title: "Plant Sale",
-date: "2026-03-31", 
-content: ` <p> Our annual plant sale is happening on 16th May 2026, 10am-12 noon. This is our main fundraising event of the year, and takes place next to the community centre in Heatherton. </p> 
-<p> Do come by to buy some plants, meet the team, and find out more about the group! </p> 
-<img src="./images/plantsale.jpg"
-     class="img img-sm clickable">
-`},  
-{ title: "Welcome to our new website!",
- date: "2026-03-28",
-  content: `
-    <p> We hope you find this website useful. </p>
-  `},
-]; 
-</script>
-    <div id="header"></div> 
-<section class="welcome"> 
- <div> 
-  <h1> Welcome to our news page </h1> 
-  <p> Keep up to date with our adventures! </p>   
-   </div> 
-</section> 
+    <title>News - 173rd Derby (Heatherton) Scouts</title>
 
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
 
-<div>
-<section>
-<!-- 📰 Latest (AUTO) -->
-<div id="featured" class="featured"></div>
+<div id="header"></div>
+
+<section class="welcome">
+    <div>
+        <h1>News</h1>
+        <p>Keep up to date with our adventures!</p>
+    </div>
 </section>
+
+<!-- Latest News -->
 <section>
-<!-- 📚 Older Posts (AUTO) -->
-<div class="older-posts">
-  <h3>Previous Posts</h3>
-  <ul id="older"></ul>
-</div> 
+    <div id="featured" class="featured"></div>
 </section>
+
+<section class="archive-layout">
+
+    <!-- Archive -->
+    <div class="archive-column">
+        <h2>Previous News</h2>
+        <div id="archive"></div>
+    </div>
+
+    <!-- Galleries -->
+    <div class="archive-column">
+        <h2>Previous Events & Photos</h2>
+
+        <ul class="events-list">
+            <li>
+                <a href="/pages/news/gallery.html?folder=beavers2526&title=Beavers%20Photos%202025-26">
+                    Beavers 2025-2026
+                </a>
+            </li>
+
+            <li>
+                <a href="/pages/news/gallery.html?folder=cubs2526&title=Cubs%20Photos%202025-26">
+                    Cubs 2025-2026
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</section>
+
+<div id="footer"></div>
+
+<div id="fullscreen">
+    <span id="closeBtn">&times;</span>
+    <img id="fullImg">
 </div>
 
-
-<div id="footer"></div> 
-<div id="fullscreen"> <span id="closeBtn">&times;</span> <img id="fullImg"></div>
 <script src="/style/script.js"></script>
+
+<script>
+
+const posts = [
+
+    /* ADD NEW POSTS HERE */
+
+    {
+        title: "Beavers get their Bronze Award!",
+        date: "2026-05-27",
+        content: `
+            <p>
+                Our Beaver colony reopened in September 2025.
+                Today we awarded our first 2 Beavers their Bronze
+                Award since reopening! Huge congratulations to both!
+            </p>
+        `
+    },
+
+    {
+        title: "Plant Sale",
+        date: "2026-03-31",
+        content: `
+            <p>
+                Our annual plant sale is happening on 16th May 2026,
+                10am-12 noon. This is our main fundraising event of
+                the year, and takes place next to the community
+                centre in Heatherton.
+            </p>
+
+            <p>
+                Do come by to buy some plants, meet the team,
+                and find out more about the group!
+            </p>
+
+            <img src="./images/plantsale.jpg"
+                 class="img img-sm clickable">
+        `
+    },
+
+    {
+        title: "Welcome to our new website!",
+        date: "2026-03-28",
+        content: `
+            <p>We hope you find this website useful.</p>
+        `
+    }
+
+];
+
+function buildArchive() {
+
+    const sortedPosts = [...posts].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+    );
+
+    /* ---------- FEATURED POST ---------- */
+
+    const featured = document.getElementById("featured");
+
+    if (sortedPosts.length > 0) {
+
+        const latest = sortedPosts[0];
+
+        featured.innerHTML = `
+            <article class="news-post">
+                <h2>${latest.title}</h2>
+                <p><strong>${latest.date}</strong></p>
+                ${latest.content}
+            </article>
+        `;
+    }
+
+    /* ---------- ARCHIVE ---------- */
+
+    const archive = document.getElementById("archive");
+
+    archive.innerHTML = "";
+
+    const archivePosts = sortedPosts.slice(1);
+
+    const grouped = {};
+
+    archivePosts.forEach(post => {
+
+        const year = new Date(post.date).getFullYear();
+
+        if (!grouped[year]) {
+            grouped[year] = [];
+        }
+
+        grouped[year].push(post);
+
+    });
+
+    Object.keys(grouped)
+        .sort((a, b) => b - a)
+        .forEach(year => {
+
+            const yearDiv = document.createElement("div");
+            yearDiv.className = "archive-year";
+
+            yearDiv.innerHTML = `
+                <div class="year-header">
+                    <span class="triangle"></span>
+                    <strong>${year}</strong>
+                </div>
+
+                <div class="year-content"></div>
+            `;
+
+            const yearContent =
+                yearDiv.querySelector(".year-content");
+
+            grouped[year].forEach(post => {
+
+                const postDiv = document.createElement("div");
+                postDiv.className = "archive-post";
+
+                postDiv.innerHTML = `
+                    <div class="post-header">
+                        <span class="triangle"></span>
+                        <strong>${post.title}</strong>
+                        <span class="date">
+                            (${post.date})
+                        </span>
+                    </div>
+
+                    <div class="post-content">
+                        ${post.content}
+                    </div>
+                `;
+
+                const postHeader =
+                    postDiv.querySelector(".post-header");
+
+                postHeader.addEventListener("click", () => {
+
+                    const isOpen =
+                        postDiv.classList.contains("open");
+
+                    yearContent
+                        .querySelectorAll(".archive-post")
+                        .forEach(p => p.classList.remove("open"));
+
+                    if (!isOpen) {
+                        postDiv.classList.add("open");
+                    }
+
+                    initFullscreenImages();
+
+                });
+
+                yearContent.appendChild(postDiv);
+
+            });
+
+            const yearHeader =
+                yearDiv.querySelector(".year-header");
+
+            yearHeader.addEventListener("click", () => {
+
+                const isOpen =
+                    yearDiv.classList.contains("open");
+
+                document
+                    .querySelectorAll(".archive-year")
+                    .forEach(y => {
+
+                        y.classList.remove("open");
+
+                        y.querySelectorAll(".archive-post")
+                            .forEach(p => p.classList.remove("open"));
+
+                    });
+
+                if (!isOpen) {
+                    yearDiv.classList.add("open");
+                }
+
+            });
+
+            archive.appendChild(yearDiv);
+
+        });
+
+    initFullscreenImages();
+
+}
+
+buildArchive();
+
+</script>
+
 </body>
 </html>
+```

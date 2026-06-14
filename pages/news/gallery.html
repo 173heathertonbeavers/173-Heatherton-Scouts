@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon.png">
+   
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gallery</title>
+    <meta name="description" content="Photo gallery">
+
+    <link rel="stylesheet" href="/style/style.css">
+<script src="/style/script.js"></script>
+
+    <style>
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .gallery-item {
+            margin: 0;
+        }
+
+        .gallery-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+
+            border-radius: 8px;
+            cursor: pointer;
+
+            transition: transform 0.2s ease;
+        }
+
+        .gallery-photo:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-item video {
+            cursor: default;
+        }
+
+        .gallery-item figcaption {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .album-info {
+            text-align: center;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header"></div>
+
+<section class="welcome">
+    <div>
+        <h1 id="galleryTitle">Gallery</h1>
+        <p id="gallerySubtitle"></p>
+    </div>
+</section>
+
+<section class="album-info">
+    <p id="galleryDescription"></p>
+</section>
+
+<section>
+    <div id="gallery" class="gallery"></div>
+</section>
+
+<div id="footer"></div>
+
+<div id="fullscreen">
+    <span id="closeBtn">&times;</span>
+    <img id="fullImg">
+</div>
+
+<script src="/style/script.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const params = new URLSearchParams(window.location.search);
+
+    const galleryName = params.get("folder");
+
+    if (!galleryName) {
+        document.body.innerHTML = "<h1>No gallery specified.</h1>";
+        return;
+    }
+
+    const folder = `/images/${galleryName}`;
+
+    const title = params.get("title") || galleryName;
+    const subtitle = params.get("subtitle") || `Photos from ${title}.`;
+    const description = params.get("description") || "";
+
+    document.title = title;
+    document.getElementById("galleryTitle").textContent = title;
+    document.getElementById("gallerySubtitle").textContent = subtitle;
+    document.getElementById("galleryDescription").textContent = description;
+
+    const gallery = document.getElementById("gallery");
+
+    let media = [];
+
+    try {
+
+        const response = await fetch(`${folder}/media.json`);
+
+        if (!response.ok) {
+            throw new Error("Could not load media.json");
+        }
+
+        media = await response.json();
+
+    } catch (err) {
+
+        gallery.innerHTML = `
+            <p style="text-align:center;">
+                Gallery could not be loaded.
+            </p>
+        `;
+
+        console.error(err);
+        return;
+    }
+
+    media.forEach(item => {
+
+        const figure = document.createElement("figure");
+        figure.className = "gallery-item";
+
+        const ext = item.file.split(".").pop().toLowerCase();
+
+        if (ext === "mp4") {
+
+            figure.innerHTML = `
+                <video
+                    class="gallery-photo"
+                    controls
+                    preload="metadata">
+
+                    <source
+                        src="${folder}/${item.file}"
+                        type="video/mp4">
+
+                    Your browser does not support video.
+
+                </video>
+
+                <figcaption>
+                    ${item.caption || ""}
+                </figcaption>
+            `;
+
+        } else {
+
+            figure.innerHTML = `
+                <img
+                    src="${folder}/${item.file}"
+                    alt="${item.caption || ""}"
+                    class="gallery-photo clickable">
+
+                <figcaption>
+                    ${item.caption || ""}
+                </figcaption>
+            `;
+        }
+
+        gallery.appendChild(figure);
+
+    });
+
+    // Your existing fullscreen function should only attach to images
+    if (typeof initFullscreenImages === "function") {
+        initFullscreenImages();
+    }
+
+});
+</script>
+
+</body>
+</html>
