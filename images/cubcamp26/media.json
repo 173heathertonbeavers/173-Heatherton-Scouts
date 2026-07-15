@@ -1,7 +1,23 @@
 [
     {
+        "file": "A game of Scrawl.jpeg",
+        "caption": "A game of Scrawl"
+    },
+    {
         "file": "Camp Setup.jpeg",
         "caption": "Camp Setup"
+    },
+    {
+        "file": "Campfire 2.jpeg",
+        "caption": "Campfire 2"
+    },
+    {
+        "file": "Campfire.jpeg",
+        "caption": "Campfire"
+    },
+    {
+        "file": "Campsite.jpeg",
+        "caption": "Campsite"
     },
     {
         "file": "Football in free time 2.jpeg",
@@ -20,11 +36,19 @@
         "caption": "Ice cream Break on the Hike"
     },
     {
+        "file": "Pioneering Project.jpeg",
+        "caption": "Pioneering Project"
+    },
+    {
         "file": "Playing games in the dining shelter.jpeg",
         "caption": "Playing games in the dining shelter"
     },
     {
         "file": "The kids' tents.jpeg",
         "caption": "The kids' tents"
+    },
+    {
+        "file": "Wake-Up Call with 3 Lions as England won the quarter-final of the World Cup!.jpeg",
+        "caption": "Wake Up Call with 3 Lions as England won the quarter final of the World Cup!"
     }
 ]
